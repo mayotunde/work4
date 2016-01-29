@@ -1,0 +1,42 @@
+<!doctype 
+<html>
+<head>
+<title>styling geojson points and lines features</title>
+<meta charset='utf-8' />
+<link rel='stylesheet' href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+<script src='http://code.jquery.com/jquery-2.1.0.min.js'></script>
+</head>
+<body>
+<div id='map' style='width:700px;height:500px'></div>
+<script>
+var map = L.map('map').setView([9.00, 8.00], 8);
+attr = '&copy:<a href="http://stamen.com">stamen-maps</a>, '+'<a href="http://mapsnigeriainitiative.wordpress.com">mapsni</a>';
+L.tileLayer('http://{s}.tiles.stamen.com/watercolor/{z}/{x}/{y}.png', {attribution: attr}).addTo(map);
+
+$.getJSON("pointoccur.geojson",function(data){
+var geoJson = L.geoJson(data, {
+pointToLayer: function(feature, latlng){
+marker = L.circleMarker(latlng)
+
+marker.bindPopup(feature.properties.name_1 + "<br>" + feature.properties.region)
+return marker;},
+style: function(feature, latlng){
+switch(feature.properties.region){
+case 'NW': return {fillColor:'#FED976', fillOpacity: 0.5};
+}}}).addTo(map);
+});
+
+
+
+var style = {color:'#813', dashArray: '7', weight: 2};
+
+$.getJSON("nigrailjson.geojson",function(data){
+L.geoJson(data, style).addTo(map);
+});
+
+
+
+</script>
+</body>
+</html>
